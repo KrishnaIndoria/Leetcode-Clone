@@ -2,7 +2,6 @@ const express = require('express')
 const app = express();
 require('dotenv').config(); //dotenv fetches all the env variables into process.env
 const main = require('./config/db')
-const cookie =  require('cookie-parser');
 const cookieParser = require('cookie-parser');
 
 app.use(express.json());

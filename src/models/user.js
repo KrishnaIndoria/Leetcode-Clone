@@ -31,9 +31,13 @@ const userSchema = new Schema({
     },
     problemsolved:{
         type:[String]
+    },
+    password:{
+        type:String,
+        required:true
     }
 },{
-    timestamps=true
+    timestamps:true
 });
 
 const User = mongoose.model("user",userSchema);
