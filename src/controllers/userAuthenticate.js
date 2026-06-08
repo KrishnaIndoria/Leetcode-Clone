@@ -1,11 +1,11 @@
-const { validate } = require("../utils/validator")
-const {User} = require("../models/user")
+const validator  = require("../utils/validator")
+const User = require("../models/user")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userRegister = async(req,res)=>{
     try{
-        validate(req.body);
+        validator(req.body);
         const {firstName,email,password} = req.body;
         req.body.password = await bcrypt.hash(password,10); //hashing password n thn storing in db
 
@@ -21,13 +21,17 @@ const userRegister = async(req,res)=>{
 
 const login = async(req,res)=>{
     try{
+        // console.log(req.body);
         const {email,password} = req.body;
         if(!email)
             throw new Error("Invalid credentials");
         if(!password)
             throw new Error("Invalid credentials");
 
-        const user = await User.find({email});
+        const user = await User.findOne({email});
+        if(!user)
+            throw new Error("User not found");
+
         const match = bcrypt.compare(req.body.password,user.password);
 
         if(!match)
@@ -45,11 +49,14 @@ const login = async(req,res)=>{
 
 const logout = async(req,res)=>{
     try{
-
+        
     }
     catch(err){
 
     }
+}
+const getProfile = (req,res)=>{
+
 }
 
 module.exports = {userRegister,login,logout,getProfile};

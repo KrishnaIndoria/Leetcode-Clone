@@ -3,9 +3,12 @@ const app = express();
 require('dotenv').config(); //dotenv fetches all the env variables into process.env
 const main = require('./config/db')
 const cookieParser = require('cookie-parser');
+const authRouter = require('./routes/userAuth');
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/user",authRouter);
 
 main()
 .then( ()=>{
