@@ -1,10 +1,12 @@
-const redis =  require('redis');
+const {createClient} =  require('redis');
 
 const client = createClient({
     username: 'default',
     password: process.env.REDIS_PASS,
     socket: {
-        host: 'dog-kettle-button-58831.db.redis.io',
+        host: process.env.REDIS_HOST,
         port: 11113
     }
 });
+
+module.exports = client;

@@ -4,16 +4,25 @@ require('dotenv').config(); //dotenv fetches all the env variables into process.
 const main = require('./config/db')
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/userAuth');
+const RedisClient  = require('../src/config/redis');
 
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/user",authRouter);
 
-main()
-.then( ()=>{
+const InitailizeConnection = async()=>{
+  try{
+    await Promise.all([main(),RedisClient.connect()]);
+    console.log("DB IS CONNECTED");
+
     app.listen(process.env.PORT,()=>{
-      console.log("Server running at port no:"+process.env.PORT);
+      console.log("Server listening at port no :"+process.env.PORT)
     })
-})
-.catch(err=>console.log("Error occured:"+err));
+  }
+  catch(err){
+    console.log("Error:"+err);
+  }
+}
+
+InitailizeConnection();

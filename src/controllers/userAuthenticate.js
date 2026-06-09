@@ -2,6 +2,7 @@ const validator  = require("../utils/validator")
 const User = require("../models/user")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const RedisClient  = require('../config/redis');
 
 const userRegister = async(req,res)=>{
     try{
@@ -9,8 +10,9 @@ const userRegister = async(req,res)=>{
         const {firstName,email,password} = req.body;
         req.body.password = await bcrypt.hash(password,10); //hashing password n thn storing in db
 
+        req.body.role = "user";
         const user = await User.create(req.body);
-        const token = jwt.sign({_id:user._id,emailID:email},process.env.JWT_KEY,{expiresIn:60*60});
+        const token = jwt.sign({_id:user._id,emailID:email,role:'user'},process.env.JWT_KEY,{expiresIn:60*60});
         res.cookie('token',token,{maxAge:60*60*1000});
         res.status(201).send("User registered successfully");
     }
@@ -37,7 +39,7 @@ const login = async(req,res)=>{
         if(!match)
             throw new Error("Invalid password");
 
-        const token = jwt.sign({_id:user._id,emailID:email},process.env.JWT_KEY,{expiresIn:60*60});
+        const token = jwt.sign({_id:user._id,emailID:email,role:user.role},process.env.JWT_KEY,{expiresIn:60*60});
         res.cookie('token',token,{maxAge:60*60*1000});
         res.status(200).send("Logged in succesfully");
 
@@ -49,14 +51,35 @@ const login = async(req,res)=>{
 
 const logout = async(req,res)=>{
     try{
-        
+        const {token} = req.cookies;
+        const payload = jwt.decode(token);
+
+        await RedisClient.set(`token:${token}`,'Blocked');
+        await RedisClient.expireAt(`token:${token}`,payload.exp);
+
+        res.cookie("token",null,{expires:new Date(Date.now())});
+        res.send("Logged out succesfully");
     }
     catch(err){
-
+        res.status(503).send("Error:"+err);
     }
 }
-const getProfile = (req,res)=>{
 
+const adminRegister = async(req,res)=>{
+        try{
+        validator(req.body);
+        const {firstName,email,password} = req.body;
+        req.body.password = await bcrypt.hash(password,10); //hashing password n thn storing in db
+
+        req.body.role = "admin";
+        const user = await User.create(req.body);
+        const token = jwt.sign({_id:user._id,emailID:email,role:'admin'},process.env.JWT_KEY,{expiresIn:60*60});
+        res.cookie('token',token,{maxAge:60*60*1000});
+        res.status(201).send("User registered successfully");
+    }
+    catch(err){
+        res.status(400).send("Error:"+err);
+    }
 }
 
-module.exports = {userRegister,login,logout,getProfile};
+module.exports = {userRegister,login,logout,adminRegister};

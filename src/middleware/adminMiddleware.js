@@ -3,7 +3,7 @@ const User = require('../models/user');
 const redisClient = require('../config/redis');
 
 // this is to validate or verify jwt tokens sent by user during request 
-const userMiddleware = async(req,res,next)=>{
+const adminMiddleware = async(req,res,next)=>{
     try{
         const {token} = req.cookies;
         if(!token)
@@ -13,6 +13,8 @@ const userMiddleware = async(req,res,next)=>{
 
         const {_id} = payload;
         const user = await User.findById(_id);
+        if(payload.role!="admin")
+            throw new Error("User does not exist(admin)");
         if(!user)
             throw new Error("User does not exist");
 
@@ -29,7 +31,6 @@ const userMiddleware = async(req,res,next)=>{
         res.send("Error:"+err);
     }
     
-
 }
 
-module.exports = userMiddleware;
+module.exports = adminMiddleware;
