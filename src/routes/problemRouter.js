@@ -1,12 +1,13 @@
 const express = require('express');
 const problemRouter = express.Router();
+const adminMiddleware = require('../middleware/adminMiddleware');
 
 // these 3 can only be done by admin
-problemRouter.post("/create",ProblemCreate);
-problemRouter.patch("/:id",ProblemUpdate);
-problemRouter.delete("/:id",ProblemDelete);
+problemRouter.post("/create",adminMiddleware,CreateProblem);
+problemRouter.patch("/:id",UpdateProblem);
+problemRouter.delete("/:id",DeleteProblem);
 
 // these 3 can be done by users
-problemRouter.get("/:id",ProblemFetch);
-problemRouter.get("/",AllProblemFetch);
-problemRouter.get("/user",SolvedProblem);
+problemRouter.get("/:id",getProblembyID);
+problemRouter.get("/",getAllProblem);
+problemRouter.get("/user",SolvedProblembyUser);
