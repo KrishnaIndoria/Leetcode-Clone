@@ -15,7 +15,7 @@ const submitBatch = async(submissions)=>{
     method: 'POST',
     url: 'https://ce.judge0.com/submissions/batch',
     params: {
-        base64_encoded: 'true'
+        base64_encoded: 'false'
     },
     headers: {
       'Content-Type': 'application/json'
@@ -37,4 +37,38 @@ async function fetchData() {
 return await fetchData();
 };
 
-module.exports = {getIDbyLanguage,submitBatch};
+const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+const submitTokens = async (resultTokens) => {
+  const tokenString = resultTokens.map(t => t.token).join(",");
+  const options = {
+     method: 'GET',
+     url: 'https://ce.judge0.com/submissions/batch',
+     params: {
+        tokens: tokenString,
+        base64_encoded: 'false',
+        fields: 'stdout,stderr,status_id,status,compile_output'
+     }
+  };
+
+  while (true) {
+    try{
+      const response = await axios.request(options);
+      const results = response.data.submissions;
+      const isFinished = results.every((r) => r.status_id > 2);
+      if (isFinished) {
+        return results;
+      }
+      console.log("Still processing... waiting 1 second");
+      await waiting(1000);
+    }
+    catch (error){
+      throw new Error("error:"+error);
+      break;
+    }
+  }
+};
+  
+
+     
+module.exports = {getIDbyLanguage,submitBatch,submitTokens};

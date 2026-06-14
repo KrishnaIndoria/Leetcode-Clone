@@ -53,7 +53,7 @@ const problemSchema = new Schema({
         {
             language:{
                 type:String,
-                required:trusted
+                required:true
             },
             initialCode:{
                 type:String,

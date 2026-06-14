@@ -4,12 +4,14 @@ require('dotenv').config(); //dotenv fetches all the env variables into process.
 const main = require('./config/db')
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/userAuth');
+const problemRouter = require('./routes/problemRouter');
 const RedisClient  = require('../src/config/redis');
 
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/user",authRouter);
+app.use("/problem",problemRouter);
 
 const InitailizeConnection = async()=>{
   try{
