@@ -4,7 +4,7 @@ const getIDbyLanguage = (lang)=>{
     const language={
         "c++":54,
         "java":62,
-        "javascript":63
+        "javascript":102
     }
     return language[lang.toLowerCase()];  //ex: language[java] , returns 62
 };
@@ -40,10 +40,12 @@ return await fetchData();
 const waiting = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const submitTokens = async (resultTokens) => {
-  const tokenString = resultTokens.map(t => t.token).join(",");
+  const tokenString = resultTokens.join(",");
+  console.log(tokenString);
   const options = {
      method: 'GET',
      url: 'https://ce.judge0.com/submissions/batch',
+     timeout: 5000,
      params: {
         tokens: tokenString,
         base64_encoded: 'false',
@@ -53,18 +55,23 @@ const submitTokens = async (resultTokens) => {
 
   while (true) {
     try{
+      console.log("Sending GET request");
       const response = await axios.request(options);
+      console.log("Response:");
+      console.log(JSON.stringify(response.data,null,2));
       const results = response.data.submissions;
       const isFinished = results.every((r) => r.status_id > 2);
+      console.log("Finished:", isFinished);
       if (isFinished) {
         return results;
       }
       console.log("Still processing... waiting 1 second");
       await waiting(1000);
     }
-    catch (error){
-      throw new Error("error:"+error);
-      break;
+    catch(error){
+      console.log(error.response?.data);
+      console.log(error.message);
+      throw error;
     }
   }
 };
