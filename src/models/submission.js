@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { schema } = require('./problems');
 const Schema = mongoose.Schema;
 
 const submissionSchema = new Schema({
@@ -50,3 +49,5 @@ const submissionSchema = new Schema({
     timestamps:true
 })
 
+const Submission = mongoose.model('submission',submissionSchema);
+module.exports = Submission;
