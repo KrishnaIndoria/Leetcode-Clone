@@ -4,18 +4,18 @@ const {getIDbyLanguage,submitBatch,submitTokens} = require('../utils/problemUtil
 
 const submitCode = async(req,res)=>{
     try{
-        const userID = req.user._id;
-        const ProblemID = req.params.id;
+        const userId = req.user._id;
+        const problemId = req.params.id;
         const {code,language} = req.body;
 
-        if(!userID||!ProblemID||!code||!language)
+        if(!userId||!problemId||!code||!language)
             return res.status(400).send("Some feild is missing");
 
-        const problem = await Problem.findById(ProblemID);
+        const problem = await Problem.findById(problemId);
 
         const submitedResult = await Submission.create({
-            userID,
-            problemID,
+            userId,
+            problemId,
             code,
             language,
             status:'pending',
@@ -43,7 +43,7 @@ const submitCode = async(req,res)=>{
         for(const test of testResult){
             if(test.status_id==3){
                 testCasesPassed++;
-                runtime = runtime+parsefloat(test.time);
+                runtime = runtime+parseFloat(test.time);
                 memory = Math.max(memory,test.memory);
             }
             else{
@@ -68,6 +68,11 @@ const submitCode = async(req,res)=>{
 
         await submitedResult.save();
 
+        if(!req.user.problemsolved.includes(problemId)){
+            req.user.problemsolved.push(problemId);
+            await req.user.save();
+        }
+
         res.status(201).send(submitedResult);
 
     }
@@ -76,5 +81,38 @@ const submitCode = async(req,res)=>{
     }
 }
 
+// here we only check code , but do not save it in DB.
+const runCode = async(req,res)=>{
+        try{
+        const userId = req.user._id;
+        const problemId = req.params.id;
+        const {code,language} = req.body;
 
-module.exports = {submitCode};
+        if(!userId||!problemId||!code||!language)
+            return res.status(400).send("Some feild is missing");
+
+        const problem = await Problem.findById(problemId);
+
+        const lang_id = getIDbyLanguage(language);
+
+        const submissions = problem.visibleTestCases.map((testcase)=>({
+            source_code : code,
+            language_id : lang_id,
+            stdin:testcase.inputs,
+            expected_output:testcase.output
+        }));
+
+        const submitResult = await submitBatch(submissions);
+        const recievedTokens = submitResult.map(value=>value.token);
+        const testResult = await submitTokens(recievedTokens);
+
+        res.status(201).send(testResult);
+
+    }
+    catch(err){
+        res.status(500).send("Error:"+err);
+    }
+}
+
+
+module.exports = {submitCode,runCode};
