@@ -144,4 +144,20 @@ const SolvedProblembyUser = async(req,res)=>{
         res.status(500).send("Error:"+err);
     }
 }
+
+const submittedProblem = async(req,res)=>{
+    try{
+        const userID = req.user._id;
+        const problemID = req.params.pid;
+
+        const ans = await Submission.find({userID,problemID});
+        if(!ans.length==0){
+            return res.status(200).send("No submission is present");
+        }
+        res.status(200).send(ans);
+    }
+    catch(err){
+        res.status(500).send("Error:"+err);
+    }
+}
 module.exports = {CreateProblem,UpdateProblem,DeleteProblem,getProblembyID,getAllProblem,SolvedProblembyUser};
