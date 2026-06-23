@@ -160,4 +160,4 @@ const submittedProblem = async(req,res)=>{
         res.status(500).send("Error:"+err);
     }
 }
-module.exports = {CreateProblem,UpdateProblem,DeleteProblem,getProblembyID,getAllProblem,SolvedProblembyUser};
+module.exports = {CreateProblem,UpdateProblem,DeleteProblem,getProblembyID,getAllProblem,SolvedProblembyUser,submittedProblem};
