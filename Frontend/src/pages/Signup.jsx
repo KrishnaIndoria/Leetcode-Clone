@@ -1,15 +1,31 @@
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod'; //to use zod we need this
+import { object, z } from 'zod';  
+
+// validation of input data
+const SignupSchema = z.object({
+    firstName:z.string().min(3,"Minimum 3 characters needed"),
+    emailID:z.string().email("Invalid Email"),
+    password:z.string().min(5,"Minimum 5 characters needed")
+})
+
+const submitedForm = (data)=>{
+    console.log(data);
+}
 
 function Signup(){
-    const {register,handleSubmit,formState: { errors },} = useForm();
+    const {register,handleSubmit,formState: { errors },} = useForm({resolver:zodResolver(SignupSchema)});
     return(
-        <form onSubmit={handleSubmit((data)=>console.log(data))}>
+        <form onSubmit={handleSubmit(submitedForm)}>
             <input {...register('firstName')}
             placeholder='firstname' />
-            <input {...register('email')}
-            placeholder='email' />
+            {errors.firstName && (<span>{errors.firstName.message}</span>)}
+            <input {...register('emailID')}
+            placeholder='emailID' />
+            {errors.emailID && (<span>{errors.emailID.message}</span>)}
             <input {...register('password')}
-            placeholder='password' />
+            placeholder='password' type='password' />
+            {errors.password && (<span>{errors.password.message}</span>)}
             <button type='submit'>Submit</button>
         </form>
     )
