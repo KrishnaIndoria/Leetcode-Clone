@@ -9,5 +9,17 @@ authRouter.post("/login",login);
 authRouter.post("/logout",userMiddleware,logout);
 authRouter.post("/admin/Register",adminMiddleware,adminRegister);
 authRouter.delete("/deleteProfile",userMiddleware,deleteProfile);
+authRouter.get("/check",userMiddleware,(req,res)=>{
+    const reply = {
+        firstname:req.user.firstName,
+        emailID:req.user.email,
+        _id:req.user._id
+    }
+
+    res.status(201).json({
+        user:reply,
+        message:"Valid User"
+    })
+})
 
 module.exports = authRouter;

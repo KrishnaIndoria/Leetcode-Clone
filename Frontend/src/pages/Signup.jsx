@@ -1,37 +1,91 @@
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod'; //to use zod we need this
-import { object, z } from 'zod';  
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 // validation of input data
 const SignupSchema = z.object({
-    firstName:z.string().min(3,"Minimum 3 characters needed"),
-    emailID:z.string().email("Invalid Email"),
-    password:z.string().min(5,"Minimum 5 characters needed")
+    firstName: z.string().min(3, "Minimum 3 characters needed"),
+    emailID: z.string().email("Invalid Email"),
+    password: z.string().min(5, "Minimum 5 characters needed")
 })
 
-const submitedForm = (data)=>{
+const submitedForm = (data) => {
     console.log(data);
 }
 
-function Signup(){
-    const {register,handleSubmit,formState: { errors },} = useForm({resolver:zodResolver(SignupSchema)});
-    return(
-        <form onSubmit={handleSubmit(submitedForm)}>
-            <input {...register('firstName')}
-            placeholder='firstname' />
-            {errors.firstName && (<span>{errors.firstName.message}</span>)}
-            <input {...register('emailID')}
-            placeholder='emailID' />
-            {errors.emailID && (<span>{errors.emailID.message}</span>)}
-            <input {...register('password')}
-            placeholder='password' type='password' />
-            {errors.password && (<span>{errors.password.message}</span>)}
-            <button type='submit'>Submit</button>
-        </form>
-    )
+function Signup() {
+    const {register,handleSubmit,formState: { errors },} = useForm({resolver: zodResolver(SignupSchema)});
+
+    return (
+        <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4">
+            <div className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-xl shadow-2xl">
+                <div className="p-8">
+                    <h1 className="text-3xl font-bold text-center text-white mb-8">
+                        Create Account
+                    </h1>
+
+                    <form onSubmit={handleSubmit(submitedForm)}className="space-y-5">
+                        <div>
+                            <input
+                                {...register("firstName")}
+                                placeholder="First Name"
+                                className="w-full bg-[#334155] border border-slate-600 rounded-lg px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+                            {errors.firstName && (
+                                <span className="text-red-400 text-sm mt-1 block">
+                                    {errors.firstName.message}
+                                </span>
+                            )}
+                        </div>
+
+                        <div>
+                            <input
+                                {...register("emailID")}
+                                placeholder="Email"
+                                className="w-full bg-[#334155] border border-slate-600 rounded-lg px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+                            {errors.emailID && (
+                                <span className="text-red-400 text-sm mt-1 block">
+                                    {errors.emailID.message}
+                                </span>
+                            )}
+                        </div>
+
+                        <div>
+                            <input
+                                {...register("password")}
+                                type="password"
+                                placeholder="Password"
+                                className="w-full bg-[#334155] border border-slate-600 rounded-lg px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+                            {errors.password && (
+                                <span className="text-red-400 text-sm mt-1 block">
+                                    {errors.password.message}
+                                </span>
+                            )}
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition duration-200 cursor-pointer"
+                        >
+                            Create Account
+                        </button>
+
+                        <p className="text-center text-slate-400 text-sm mt-4">
+                            Already have an account?{" "}
+                            <span className="text-cyan-400 hover:text-cyan-300 cursor-pointer">
+                                Login
+                            </span>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
 }
 
-export default Signup
+export default Signup;
 
 // import { useEffect, useState } from "react"
 

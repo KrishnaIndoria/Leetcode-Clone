@@ -13,9 +13,17 @@ const userRegister = async(req,res)=>{
 
         req.body.role = "user";
         const user = await User.create(req.body);
+        const reply = {
+            firstName:user.firstName,
+            emailID:user.email,
+            _id:user._id
+        }
         const token = jwt.sign({_id:user._id,emailID:email,role:'user'},process.env.JWT_KEY,{expiresIn:60*60});
         res.cookie('token',token,{maxAge:60*60*1000});
-        res.status(201).send("User registered successfully");
+        res.status(201).json({
+            user:reply,
+            message:"User registered succesfully"
+        });
     }
     catch(err){
         res.status(400).send("Error:"+err);
@@ -40,9 +48,18 @@ const login = async(req,res)=>{
         if(!match)
             throw new Error("Invalid password");
 
+        const reply = {
+            firstName:user.firstName,
+            emailID:user.email,
+            _id:user._id
+        };
+
         const token = jwt.sign({_id:user._id,emailID:email,role:user.role},process.env.JWT_KEY,{expiresIn:60*60});
         res.cookie('token',token,{maxAge:60*60*1000});
-        res.status(200).send("Logged in succesfully");
+        res.status(200).json({
+            user:reply,
+            message:"Logged in succesfully"
+        });
 
     }
     catch(err){
