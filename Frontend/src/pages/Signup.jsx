@@ -1,19 +1,37 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useDispatch,useSelector } from 'react-redux';
+import {registerUser} from '../authSlice';
+import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
+
 
 // validation of input data
 const SignupSchema = z.object({
     firstName: z.string().min(3, "Minimum 3 characters needed"),
-    emailID: z.string().email("Invalid Email"),
+    email: z.string().email("Invalid Email"),
     password: z.string().min(5, "Minimum 5 characters needed")
 })
 
-const submitedForm = (data) => {
-    console.log(data);
-}
+
 
 function Signup() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const {isAuthenticated,loading,error} = useSelector((state)=> state.auth);
+
+    function submittedForm(data) {
+        dispatch(registerUser(data));
+    }
+    
+    useEffect(()=>{
+        console.log("isAuthenticated:", isAuthenticated);
+        if(isAuthenticated){
+            navigate('/')
+        }
+    },[isAuthenticated])
+
     const {register,handleSubmit,formState: { errors },} = useForm({resolver: zodResolver(SignupSchema)});
 
     return (
@@ -24,7 +42,7 @@ function Signup() {
                         Create Account
                     </h1>
 
-                    <form onSubmit={handleSubmit(submitedForm)}className="space-y-5">
+                    <form onSubmit={handleSubmit(submittedForm)}className="space-y-5">
                         <div>
                             <input
                                 {...register("firstName")}
@@ -40,7 +58,7 @@ function Signup() {
 
                         <div>
                             <input
-                                {...register("emailID")}
+                                {...register("email")}
                                 placeholder="Email"
                                 className="w-full bg-[#334155] border border-slate-600 rounded-lg px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             />

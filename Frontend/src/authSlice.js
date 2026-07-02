@@ -60,7 +60,7 @@ export const logoutUser = createAsyncThunk(
 
 const authSlice = createSlice({
     name:'auth',
-    initialState:{user:null,loading:false,error:null,isauthenticated:false},
+    initialState:{user:null,loading:false,error:null,isAuthenticated:false},
     reducers:{},
     extraReducers:(builder)=>{
         builder
@@ -71,12 +71,12 @@ const authSlice = createSlice({
         .addCase(registerUser.fulfilled,(state,action)=>{
             state.loading = false;
             state.user = action.payload;
-            state.isauthenticated = !!action.payload;
+            state.isAuthenticated = !!action.payload;
         })
         .addCase(registerUser.rejected,(state,action)=>{
             state.loading = false;
             state.error = action.payload?.message || 'something went wrong';
-            state.isauthenticated = false;
+            state.isAuthenticated = false;
             state.user = null;
         })
 
@@ -87,12 +87,12 @@ const authSlice = createSlice({
         .addCase(loginUser.fulfilled,(state,action)=>{
             state.loading = false;
             state.user = action.payload;
-            state.isauthenticated = !!action.payload;
+            state.isAuthenticated = !!action.payload;
         })
         .addCase(loginUser.rejected,(state,action)=>{
             state.loading = false;
             state.error = action.payload?.message || 'something went wrong';
-            state.isauthenticated = false;
+            state.isAuthenticated = false;
             state.user = null;
         })
 
@@ -104,12 +104,12 @@ const authSlice = createSlice({
         .addCase(checkAuth.fulfilled,(state,action)=>{
             state.loading = false;
             state.user = action.payload;
-            state.isauthenticated = !!action.payload;
+            state.isAuthenticated = !!action.payload;
         })
         .addCase(checkAuth.rejected,(state,action)=>{
             state.loading = false;
             state.error = action.payload?.message || 'something went wrong';
-            state.isauthenticated = false;
+            state.isAuthenticated = false;
             state.user = null;
         })
 
@@ -120,13 +120,13 @@ const authSlice = createSlice({
         .addCase(logoutUser.fulfilled,(state)=>{
             state.loading = false;
             state.user = null;
-            state.isauthenticated = false;
+            state.isAuthenticated = false;
             state.error = null;
         })
         .addCase(logoutUser.rejected,(state,action)=>{
             state.error = action.payload?.message || 'something went wrong';
             state.user = null;
-            state.isauthenticated = false;
+            state.isAuthenticated = false;
             state.loading = false;
         })
     }

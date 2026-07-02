@@ -1,17 +1,32 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useDispatch,useSelector } from 'react-redux';
+import {loginUser} from '../authSlice';
+import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 
 const LoginSchema = z.object({
-    emailID: z.string().email("Invalid email"),
+    email: z.string().email("Invalid email"),
     password: z.string().min(5, "Minimum 5 characters needed")
 });
 
-function submittedForm(data) {
-    console.log(data);
-}
 
 function Login() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const {isAuthenticated,loading,error} = useSelector((state)=> state.auth);
+
+    function submittedForm(data) {
+        dispatch(loginUser(data))
+    }
+
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate('/')
+        }
+    },[isAuthenticated])
+
     const {
         register,
         handleSubmit,
@@ -34,7 +49,7 @@ function Login() {
                     >
                         <div>
                             <input
-                                {...register("emailID")}
+                                {...register("email")}
                                 type="email"
                                 placeholder="Email"
                                 className="w-full bg-[#334155] border border-slate-600 rounded-lg px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
