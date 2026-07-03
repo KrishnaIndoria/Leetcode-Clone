@@ -47,11 +47,11 @@ export const logoutUser = createAsyncThunk(
 
     async(_,thunkAPI)=>{
         try{
-            await axiosClient.get('/user/logout');
+            await axiosClient.post('/user/logout');
             return null;
         }
         catch(err){
-            return thunAPI.rejectWithValue(err.message);
+            return thunkAPI.rejectWithValue(err.message);
         }
         
     }

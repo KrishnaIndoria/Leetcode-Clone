@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch,useSelector } from 'react-redux';
 import {loginUser} from '../authSlice';
-import { useNavigate } from 'react-router';
+import { useNavigate ,NavLink } from 'react-router';
 import { useEffect } from 'react';
 
 const LoginSchema = z.object({
@@ -78,14 +78,14 @@ function Login() {
                         <button
                             type="submit"
                             className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition duration-200 cursor-pointer"
-                        >
+                            disabled = {loading}>
                             Login
                         </button>
 
                         <p className="text-center text-slate-400 text-sm mt-4">
                             Don't have an account?{" "}
                             <span className="text-cyan-400 hover:text-cyan-300 cursor-pointer">
-                                Sign Up
+                                <NavLink to="/Signup" className="link link-primary">Signup</NavLink>
                             </span>
                         </p>
                     </form>

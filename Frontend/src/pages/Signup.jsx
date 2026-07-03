@@ -3,8 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch,useSelector } from 'react-redux';
 import {registerUser} from '../authSlice';
-import { useNavigate } from 'react-router';
+import { NavLink, useNavigate} from 'react-router';
 import { useEffect } from 'react';
+
 
 
 // validation of input data
@@ -86,14 +87,14 @@ function Signup() {
                         <button
                             type="submit"
                             className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition duration-200 cursor-pointer"
-                        >
+                            disabled = {loading}>
                             Create Account
                         </button>
 
                         <p className="text-center text-slate-400 text-sm mt-4">
                             Already have an account?{" "}
                             <span className="text-cyan-400 hover:text-cyan-300 cursor-pointer">
-                                Login
+                                <NavLink to="/Login" className="link link-primary">Login</NavLink>
                             </span>
                         </p>
                     </form>
