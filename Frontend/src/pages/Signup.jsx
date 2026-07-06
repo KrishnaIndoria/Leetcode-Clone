@@ -63,9 +63,9 @@ function Signup() {
                                 placeholder="Email"
                                 className="w-full bg-[#334155] border border-slate-600 rounded-lg px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             />
-                            {errors.emailID && (
+                            {errors.email && (
                                 <span className="text-red-400 text-sm mt-1 block">
-                                    {errors.emailID.message}
+                                    {errors.email.message}
                                 </span>
                             )}
                         </div>

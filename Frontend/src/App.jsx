@@ -2,12 +2,13 @@ import {Routes, Route ,Navigate } from "react-router";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import AdminPage from "./pages/AdminPage.jsx";
 import { checkAuth } from './authSlice.js';
 import { useDispatch,useSelector } from 'react-redux';
 import { useEffect } from "react";
 
 function App(){
-  const {isAuthenticated,loading} = useSelector((state)=>state.auth);
+  const {isAuthenticated,loading,user} = useSelector((state)=>state.auth);
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -37,6 +38,7 @@ function App(){
       <Route path="/" element={isAuthenticated?<HomePage></HomePage>:<Navigate to="/Signup"/>}></Route>
       <Route path="/Login" element={isAuthenticated?<Navigate to="/"/>:<Login></Login>}></Route>
       <Route path="/Signup" element={isAuthenticated?<Navigate to="/"/>:<Signup></Signup>}></Route>
+      <Route path="/Admin" element={isAuthenticated && user?.role ==="Admin" ? <AdminPage></AdminPage>:<Navigate to="/"/>}></Route>
     </Routes>
   )
 }
