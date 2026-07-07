@@ -6,10 +6,14 @@ const submitCode = async(req,res)=>{
     try{
         const userId = req.user._id;
         const problemId = req.params.id;
-        const {code,language} = req.body;
+        let {code,language} = req.body;
 
         if(!userId||!problemId||!code||!language)
             return res.status(400).send("Some feild is missing");
+
+        if(language === 'cpp'){
+            language = 'c++'
+        }
 
         const problem = await Problem.findById(problemId);
 
@@ -73,7 +77,14 @@ const submitCode = async(req,res)=>{
             await req.user.save();
         }
 
-        res.status(201).send(submitedResult);
+        const accepted = (status == 'accepted')
+        res.status(201).json({
+            accepted,
+            totaltestCases : submitedResult.testCasesTotal,
+            passedTestCases : submitedResult.testCasesPassed,
+            runtime,
+            memory
+        })
 
     }
     catch(err){
@@ -86,14 +97,22 @@ const runCode = async(req,res)=>{
         try{
         const userId = req.user._id;
         const problemId = req.params.id;
-        const {code,language} = req.body;
+        let {code,language} = req.body;
 
         if(!userId||!problemId||!code||!language)
             return res.status(400).send("Some feild is missing");
 
+        if(language === 'cpp'){
+            language = 'c++'
+        }
+
         const problem = await Problem.findById(problemId);
 
         const lang_id = getIDbyLanguage(language);
+
+        let runtime = 0;
+        let memory = 0;
+        let status = true;
 
         const submissions = problem.visibleTestCases.map((testcase)=>({
             source_code : code,
@@ -106,7 +125,12 @@ const runCode = async(req,res)=>{
         const recievedTokens = submitResult.map(value=>value.token);
         const testResult = await submitTokens(recievedTokens);
 
-        res.status(201).send(testResult);
+        res.status(201).json({
+            success:status,
+            testCases: testResult,
+            runtime,
+            memory
+        })
 
     }
     catch(err){

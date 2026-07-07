@@ -2,6 +2,7 @@ import { logoutUser } from "../authSlice";
 import { useDispatch ,useSelector} from "react-redux";
 import axiosClient from '../utils/axiosClient';
 import { useEffect,useState } from "react";
+import { NavLink } from "react-router";
 function HomePage(){
     const dispatch = useDispatch();
     const {user} = useSelector((state)=>state.auth);
@@ -233,7 +234,7 @@ function HomePage(){
                                     </td>
 
                                     <td className="font-medium">
-                                        {problem.title}
+                                        <NavLink to={`/Problem/${problem._id}`} className="hover:text-primary">{problem.title}</NavLink>
                                     </td>
 
                                     <td>

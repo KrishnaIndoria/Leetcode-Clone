@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AdminPage from "./pages/AdminPage.jsx";
+import ProblemPage from "./pages/ProblemPage.jsx";
 import { checkAuth } from './authSlice.js';
 import { useDispatch,useSelector } from 'react-redux';
 import { useEffect } from "react";
@@ -39,8 +40,9 @@ function App(){
       <Route path="/Login" element={isAuthenticated?<Navigate to="/"/>:<Login></Login>}></Route>
       <Route path="/Signup" element={isAuthenticated?<Navigate to="/"/>:<Signup></Signup>}></Route>
       <Route path="/Admin" element={isAuthenticated && user?.role ==="Admin" ? <AdminPage></AdminPage>:<Navigate to="/"/>}></Route>
+      <Route path="/Problem/:problemID" element={<ProblemPage></ProblemPage>}></Route>
     </Routes>
   )
 }
 
-export default App
+export default App;
