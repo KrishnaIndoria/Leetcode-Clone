@@ -94,6 +94,7 @@ function HomePage(){
                                 Logout
                             </button>
                         </li>
+                        {user.role=="admin" &&<li><NavLink to="/Admin">Admin</NavLink></li>}
                     </ul>
 
                 </div>

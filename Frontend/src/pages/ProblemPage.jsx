@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router';
 import axiosClient from "../utils/axiosClient"
-
+import SubmissionHistory from '../components/SubmissionHistory';
 
 
 const langMap = {
@@ -24,7 +24,6 @@ const ProblemPage = () => {
   const [activeRightTab, setActiveRightTab] = useState('code');
   const editorRef = useRef(null);
   let {problemID}  = useParams();
-
   const { handleSubmit } = useForm();
 
 
@@ -177,9 +176,6 @@ const ProblemPage = () => {
       try {
         
         const response = await axiosClient.get(`/problem/problemID/${problemID}`);
-       console.log(response.data.startCode);
-       console.log(selectedLanguage);
-       console.log(langMap[selectedLanguage]);
         
         const initialCode = response.data.startCode.find(sc => sc.language === langMap[selectedLanguage]).initialCode;
 

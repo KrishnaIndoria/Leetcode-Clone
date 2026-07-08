@@ -59,7 +59,7 @@ const AdminSchema = z.object({
         .min(3),
 });
 
-function AdminPage() {
+function AdminCreate() {
 
     const submittedForm = async (data) => {
         try {
@@ -570,4 +570,4 @@ function AdminPage() {
     );
 }
 
-export default AdminPage;
+export default AdminCreate;

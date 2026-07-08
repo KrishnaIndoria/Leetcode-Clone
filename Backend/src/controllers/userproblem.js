@@ -1,6 +1,7 @@
 const {getIDbyLanguage,submitBatch,submitTokens} = require('../utils/problemUtility');
 const Problem = require('../models/problems');
 const User = require('../models/user');
+const Submission = require('../models/submission');
 
 const CreateProblem = async(req,res)=>{
     
@@ -147,17 +148,18 @@ const SolvedProblembyUser = async(req,res)=>{
 
 const submittedProblem = async(req,res)=>{
     try{
-        const userID = req.user._id;
-        const problemID = req.params.pid;
+        const userId = req.user._id;
+        const problemId = req.params.pid;
 
-        const ans = await Submission.find({userID,problemID});
-        if(!ans.length==0){
-            return res.status(200).send("No submission is present");
+        const ans = await Submission.find({userId,problemId});
+        if (ans.length === 0) {
+            return res.status(200).json([]);
         }
-        res.status(200).send(ans);
+        return res.status(200).json(ans);
     }
-    catch(err){
-        res.status(500).send("Error:"+err);
+    catch (err) {
+        console.log(err);
+        res.status(500).send("Error: " + err.message);
     }
 }
 module.exports = {CreateProblem,UpdateProblem,DeleteProblem,getProblembyID,getAllProblem,SolvedProblembyUser,submittedProblem};
