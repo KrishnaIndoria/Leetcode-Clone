@@ -235,7 +235,7 @@ function HomePage(){
                                     </td>
 
                                     <td className="font-medium">
-                                        <NavLink to={`/Problem/${problem._id}`} className="hover:text-primary">{problem.title}</NavLink>
+                                        <NavLink to={`/Dummy/${problem._id}`} className="hover:text-primary">{problem.title}</NavLink>
                                     </td>
 
                                     <td>

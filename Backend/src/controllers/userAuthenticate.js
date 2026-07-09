@@ -7,6 +7,7 @@ const RedisClient  = require('../config/redis');
 
 const userRegister = async(req,res)=>{
     try{
+        // console.log(req.body);
         validator(req.body);
         const {firstName,email,password} = req.body;
         req.body.password = await bcrypt.hash(password,10); //hashing password n thn storing in db
@@ -27,6 +28,7 @@ const userRegister = async(req,res)=>{
         });
     }
     catch(err){
+        console.log(err.message);
         res.status(400).send("Error:"+err);
     }
 }

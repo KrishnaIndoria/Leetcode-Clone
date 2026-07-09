@@ -316,6 +316,13 @@ const ProblemPage = () => {
           >
             Submissions
           </button>
+
+          <button 
+            className={`tab ${activeLeftTab === 'chatAI' ? 'tab-active' : ''}`}
+            onClick={() => setActiveLeftTab('chatAI')}
+          >
+            chatAI
+          </button>
         </div>
 
         {/* Left Content */}
@@ -390,6 +397,15 @@ const ProblemPage = () => {
                   <h2 className="text-xl font-bold mb-4">My Submissions</h2>
                   <div className="text-gray-500">
                     <SubmissionHistory problemID={problemID} />
+                  </div>
+                </div>
+              )}
+
+              {activeLeftTab === 'chatAI' && (
+                <div className="prose max-w-none">
+                  <h2 className="text-xl font-bold mb-4">Chat With AI</h2>
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {'You can chat with AI Here!'}
                   </div>
                 </div>
               )}

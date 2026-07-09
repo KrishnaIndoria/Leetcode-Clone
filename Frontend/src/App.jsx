@@ -6,6 +6,7 @@ import AdminPage from "./pages/Admin.jsx";
 import AdminCreate from "./components/AdminCreate.jsx";
 import AdminDelete from "./components/AdminDelete.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
+import Dummy from "./pages/Dummy.jsx";
 import { checkAuth } from './authSlice.js';
 import { useDispatch,useSelector } from 'react-redux';
 import { useEffect } from "react";
@@ -46,6 +47,7 @@ function App(){
       <Route path="/Admin/Update" element={isAuthenticated && user?.role==="admin"?<AdminCreate></AdminCreate>:<Navigate to="/"></Navigate>}></Route>
       <Route path="/Admin/Delete" element={isAuthenticated && user?.role==="admin"?<AdminDelete></AdminDelete>:<Navigate to="/"></Navigate>}></Route>
       <Route path="/Problem/:problemID" element={<ProblemPage></ProblemPage>}></Route>
+      <Route path="/dummy/:id" element={<Dummy></Dummy>}></Route>
     </Routes>
   )
 }
