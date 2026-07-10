@@ -110,9 +110,6 @@ const runCode = async(req,res)=>{
 
         const lang_id = getIDbyLanguage(language);
 
-        let runtime = 0;
-        let memory = 0;
-        let status = true;
 
         const submissions = problem.visibleTestCases.map((testcase)=>({
             source_code : code,
@@ -124,13 +121,40 @@ const runCode = async(req,res)=>{
         const submitResult = await submitBatch(submissions);
         const recievedTokens = submitResult.map(value=>value.token);
         const testResult = await submitTokens(recievedTokens);
+        let runtime = 0;
+        let memory = 0;
+        let status = true;
+
+        for (const test of testResult) {
+            runtime += parseFloat(test.time || 0);
+            memory = Math.max(memory, test.memory || 0);
+
+          if (test.status_id !== 3) {
+            status = false;
+          }
+        }
+
+        const finalResult = testResult.map((test, index) => ({
+        stdin: problem.visibleTestCases[index].inputs,
+        expected_output: problem.visibleTestCases[index].output,
+
+        stdout: test.stdout,
+        stderr: test.stderr,
+        compile_output: test.compile_output,
+
+        status_id: test.status_id,
+        status: test.status,
+
+        time: test.time,
+        memory: test.memory
+        }));
 
         res.status(201).json({
-            success:status,
-            testCases: testResult,
-            runtime,
-            memory
-        })
+        success: status,
+        testCases: finalResult,
+        runtime,
+        memory
+        });
 
     }
     catch(err){

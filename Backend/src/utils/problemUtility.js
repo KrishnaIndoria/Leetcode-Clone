@@ -49,7 +49,7 @@ const submitTokens = async (resultTokens) => {
      params: {
         tokens: tokenString,
         base64_encoded: 'false',
-        fields: 'stdout,stderr,status_id,status,compile_output,time,memory'
+        fields: 'stdin,stdout,stderr,status_id,status,compile_output,time,memory,expected_output'
      }
   };
 

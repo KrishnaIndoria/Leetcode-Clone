@@ -219,7 +219,7 @@ const ProblemPage = () => {
     
     try {
       const response = await axiosClient.post(`/submission/run/${problemID}`, {
-        code,
+        code:code,
         language: selectedLanguage
       });
 
@@ -538,8 +538,8 @@ const ProblemPage = () => {
                                 <div><strong>Input:</strong> {tc.stdin}</div>
                                 <div><strong>Expected:</strong> {tc.expected_output}</div>
                                 <div><strong>Output:</strong> {tc.stdout}</div>
-                                <div className={'text-green-600'}>
-                                  {'✓ Passed'}
+                                <div className={tc.status_id === 3 ? 'text-green-600' : 'text-red-600'}>
+                                  {tc.status_id === 3 ? '✓ Passed' : '✗ Failed'}
                                 </div>
                               </div>
                             </div>
