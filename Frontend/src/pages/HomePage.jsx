@@ -2,6 +2,7 @@ import { logoutUser } from "../authSlice";
 import { useDispatch ,useSelector} from "react-redux";
 import axiosClient from '../utils/axiosClient';
 import { useEffect,useState } from "react";
+import Dummy from "./Dummy";
 import { NavLink } from "react-router";
 function HomePage(){
     const dispatch = useDispatch();
