@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router';
 import axiosClient from "../utils/axiosClient"
 import SubmissionHistory from '../components/SubmissionHistory';
+import ChatAi from '../components/ChatAi';
 
 
 const langMap = {
@@ -405,7 +406,7 @@ const ProblemPage = () => {
                 <div className="prose max-w-none">
                   <h2 className="text-xl font-bold mb-4">Chat With AI</h2>
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                    {'You can chat with AI Here!'}
+                    <ChatAi problem={problem}/>
                   </div>
                 </div>
               )}

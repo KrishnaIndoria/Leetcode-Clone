@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/userAuth');
 const problemRouter = require('./routes/problemRouter');
 const submitRouter = require('./routes/Submit');
+const AiRouter = require('./routes/AiChat');
 const RedisClient  = require('../src/config/redis');
 const cors = require('cors');
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use("/user",authRouter);
 app.use("/problem",problemRouter);
 app.use("/submission",submitRouter);
+app.use("/Ai",AiRouter);
 
 const InitailizeConnection = async()=>{
   try{
