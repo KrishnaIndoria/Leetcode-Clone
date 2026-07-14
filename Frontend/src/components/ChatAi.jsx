@@ -76,7 +76,7 @@ function ChatAi({problem}) {
                         className="btn btn-ghost ml-2"
                         disabled={errors.message}
                     >
-                        <Send size={20} />
+                        <Send size={20} />//submit icon
                     </button>
                 </div>
             </form>
