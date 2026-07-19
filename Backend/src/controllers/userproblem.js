@@ -2,6 +2,7 @@ const {getIDbyLanguage,submitBatch,submitTokens} = require('../utils/problemUtil
 const Problem = require('../models/problems');
 const User = require('../models/user');
 const Submission = require('../models/submission');
+const SolutionVideo = require("../models/solutionVideo");
 
 const CreateProblem = async(req,res)=>{
     
@@ -113,8 +114,18 @@ const getProblembyID = async(req,res)=>{
     if(!result)
        return res.status(404).send("Problem not found");
 
-    res.status(200).send(result);
+    const videos = await SolutionVideo.find({problemId:id});
+    if(videos){    
+      result.secureUrl = secureUrl;
+      result.cloudinaryPublicId = cloudinaryPublicId;
+      result.thumbnailUrl = thumbnailUrl;
+      result.duration = duration;
+
+      return res.status(200).send(result);
     }
+      res.status(200).send(result);
+    }
+
     catch(err){
         res.status(500).send("Error:"+err);
     }

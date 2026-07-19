@@ -7,6 +7,7 @@ const authRouter = require('./routes/userAuth');
 const problemRouter = require('./routes/problemRouter');
 const submitRouter = require('./routes/Submit');
 const AiRouter = require('./routes/AiChat');
+const videoRouter = require('./routes/videoCreator');
 const RedisClient  = require('../src/config/redis');
 const cors = require('cors');
 
@@ -22,6 +23,7 @@ app.use("/user",authRouter);
 app.use("/problem",problemRouter);
 app.use("/submission",submitRouter);
 app.use("/Ai",AiRouter);
+app.use("/video",videoRouter);
 
 const InitailizeConnection = async()=>{
   try{
