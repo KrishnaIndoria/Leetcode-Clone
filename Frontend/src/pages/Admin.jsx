@@ -96,6 +96,31 @@ function AdminPage() {
 
                     </div>
 
+                    {/* Video Solution */}
+
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-lg hover:border-purple-500 transition-all duration-300">
+
+                      <div className="text-5xl mb-5">
+                           🎥
+                      </div>
+
+                      <h2 className="text-2xl font-semibold text-white mb-3">
+                         Video Solution
+                      </h2>
+
+                      <p className="text-slate-400 mb-8">
+                            Upload or update the video explanation for coding problems to help users understand the solution.
+                      </p>
+
+                      <NavLink
+                          to="/Admin/Video"
+                          className="btn btn-secondary w-full"
+                      >
+                         Manage Videos
+                      </NavLink>
+
+                    </div>
+
                 </div>
 
             </div>

@@ -114,7 +114,7 @@ const getProblembyID = async(req,res)=>{
     if(!result)
        return res.status(404).send("Problem not found");
 
-    const videos = await SolutionVideo.find({problemId:id});
+    const videos = await SolutionVideo.findOne({problemId:id});
     if(videos){    
       result.secureUrl = secureUrl;
       result.cloudinaryPublicId = cloudinaryPublicId;

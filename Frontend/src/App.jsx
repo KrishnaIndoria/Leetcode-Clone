@@ -5,6 +5,8 @@ import Signup from "./pages/Signup";
 import AdminPage from "./pages/Admin.jsx";
 import AdminCreate from "./components/AdminCreate.jsx";
 import AdminDelete from "./components/AdminDelete.jsx";
+import AdminVideo from "./components/AdminVideo.jsx";
+import AdminUpload from "./components/AdminUpload.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
 import { checkAuth } from './authSlice.js';
 import { useDispatch,useSelector } from 'react-redux';
@@ -45,6 +47,8 @@ function App(){
       <Route path="/Admin/Create" element={isAuthenticated && user?.role==="admin"?<AdminCreate></AdminCreate>:<Navigate to="/"></Navigate>}></Route>
       <Route path="/Admin/Update" element={isAuthenticated && user?.role==="admin"?<AdminCreate></AdminCreate>:<Navigate to="/"></Navigate>}></Route>
       <Route path="/Admin/Delete" element={isAuthenticated && user?.role==="admin"?<AdminDelete></AdminDelete>:<Navigate to="/"></Navigate>}></Route>
+      <Route path="/Admin/Video" element={isAuthenticated && user?.role==="admin"?<AdminVideo></AdminVideo>:<Navigate to="/"></Navigate>}></Route>
+      <Route path="/Admin/Upload/:problemId" element={isAuthenticated && user?.role==="admin"?<AdminUpload></AdminUpload>:<Navigate to="/"></Navigate>}></Route>
       <Route path="/Problem/:problemID" element={<ProblemPage></ProblemPage>}></Route>
     </Routes>
   )

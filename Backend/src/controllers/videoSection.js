@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const Problem = require("../models/problem");
+const Problem = require('../models/problems');
 const User = require("../models/user");
 const SolutionVideo = require("../models/solutionVideo");
 const { sanitizeFilter } = require('mongoose');
@@ -44,7 +44,7 @@ const generateUploadSignature = async (req, res) => {
       public_id: publicId,
       api_key: process.env.CLOUDINARY_API_KEY,
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      upload_url: `https://api.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/video/upload`,
+      upload_url: `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/video/upload`,
     });
 
   } catch (error) {
@@ -97,7 +97,7 @@ const saveVideoMetadata = async (req, res) => {
     });
 
     // Create video solution record
-    const videoSolution = new SolutionVideo({
+    const videoSolution = await SolutionVideo.create({
       problemId,
       userId,
       cloudinaryPublicId,
@@ -106,7 +106,7 @@ const saveVideoMetadata = async (req, res) => {
       thumbnailUrl
     });
 
-    await SolutionVideo.save();
+     
 
 
     res.status(201).json({
@@ -128,10 +128,10 @@ const saveVideoMetadata = async (req, res) => {
 
 const deleteVideo = async (req, res) => {
   try {
-    const { videoId } = req.params;
+    const { problemId } = req.params;
     const userId = req.user._id;
 
-    const video = await SolutionVideo.findByIdAndDelete(videoId);
+    const video = await SolutionVideo.findOneAndDelete({problemId:problemId});
     
     if (!video) {
       return res.status(404).json({ error: 'Video not found' });
