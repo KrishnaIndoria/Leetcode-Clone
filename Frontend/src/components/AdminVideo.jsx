@@ -127,7 +127,7 @@ function AdminVideo() {
                                         </div>
 
                                         <NavLink
-                                           to='/Admin/Upload/:${problem._id}'
+                                           to={`/Admin/Upload/${problem._id}`}
                                            className="btn bg-amber-500"
                                         >
                                            Upload

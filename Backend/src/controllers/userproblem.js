@@ -116,12 +116,14 @@ const getProblembyID = async(req,res)=>{
 
     const videos = await SolutionVideo.findOne({problemId:id});
     if(videos){    
-      result.secureUrl = secureUrl;
-      result.cloudinaryPublicId = cloudinaryPublicId;
-      result.thumbnailUrl = thumbnailUrl;
-      result.duration = duration;
+      const responseData = {
+        ...result.toObject(),
+        secureUrl: videos.secureUrl,
+        thumbnailUrl : videos.thumbnailUrl,
+        duration : videos.duration,
+      }
 
-      return res.status(200).send(result);
+      return res.status(200).send(responseData);
     }
       res.status(200).send(result);
     }
