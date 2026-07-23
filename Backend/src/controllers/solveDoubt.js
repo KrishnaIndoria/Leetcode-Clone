@@ -1,16 +1,18 @@
-const {GoogleGenAI} = require('@google/genai');
+const { GoogleGenAI } = require("@google/genai");
 
-const solveDoubt = async(req,res)=>{
-    try{
-        const{messages,title,description,testCases,startCode} = req.body;
-        const ai = new GoogleGenAI({apiKey:process.env.Gemini_API});
+const solveDoubt = async (req, res) => {
+    try {
+        const { messages, title, description, testCases, startCode } = req.body;
 
-        async function main(){
-            const response = await ai.models.generateContent({
-                model:"gemini-3.5-flash",
-                contents:messages,
-                config:{
-                    systemInstruction: `
+        const ai = new GoogleGenAI({
+            apiKey: process.env.Gemini_API
+        });
+
+        const response = await ai.models.generateContent({
+            model: "gemini-3.5-flash",   // or another valid model
+            contents: messages,
+            config: {
+                systemInstruction: `
 You are an expert Data Structures and Algorithms (DSA) tutor specializing in helping users solve coding problems. Your role is strictly limited to DSA-related assistance only.
 
 ## CURRENT PROBLEM CONTEXT:
@@ -78,21 +80,20 @@ You are an expert Data Structures and Algorithms (DSA) tutor specializing in hel
 
 Remember: Your goal is to help users learn and understand DSA concepts through the lens of the current problem, not just to provide quick answers.
 `
-                },
-            })
-            res.status(201).json({
-                message:response.text
-            })
-            // console.log(response.text)
-        }
-        main();
+            }
+        });
 
+        return res.status(200).json({
+            message: response.text
+        });
+
+    } catch (err) {
+        console.error("Gemini Error:", err);
+
+        return res.status(500).json({
+            message: "Failed to generate AI response."
+        });
     }
-    catch(err){
-        res.status(500).json({
-            message:"Internal server error"
-        })
-    }
-}
+};
 
 module.exports = solveDoubt;

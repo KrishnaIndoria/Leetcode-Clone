@@ -72,7 +72,8 @@ const submitCode = async(req,res)=>{
 
         await submitedResult.save();
 
-        if(!req.user.problemsolved.includes(problemId)){
+        if (status === "accepted" && !req.user.problemsolved.includes(problemId))
+        {
             req.user.problemsolved.push(problemId);
             await req.user.save();
         }
